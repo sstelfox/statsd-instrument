@@ -51,7 +51,6 @@ module StatsD::Instrument::Backends
     def socket
       if @socket.nil?
         @socket = UDPSocket.new
-        @socket.connect(host, port)
       end
       @socket
     end
@@ -76,7 +75,7 @@ module StatsD::Instrument::Backends
     end
 
     def write_packet(command)
-      socket.send(command, 0) > 0
+      socket.send(command, 0, host, port) > 0
     rescue SocketError, IOError, SystemCallError => e
       StatsD.logger.error "[StatsD] #{e.class.name}: #{e.message}"
     end
