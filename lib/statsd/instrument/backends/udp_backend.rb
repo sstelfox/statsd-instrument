@@ -75,7 +75,8 @@ module StatsD::Instrument::Backends
     end
 
     def write_packet(command)
-      socket.send(command, 0, host, port) > 0
+      StatsD.logger.info('Attempting to simplify this for diagnostics.')
+      UDPSocket.new.send(command, 0, host, port)
     rescue SocketError, IOError, SystemCallError => e
       StatsD.logger.info("Failed to send packet too: #{host}:#{port}")
       StatsD.logger.error "[StatsD] #{e.class.name}: #{e.message}"
